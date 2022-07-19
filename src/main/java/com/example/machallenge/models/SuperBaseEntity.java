@@ -1,4 +1,4 @@
-package com.example.machallenge.models.entities;
+package com.example.machallenge.models;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;

@@ -1,6 +1,6 @@
 package com.example.machallenge.controllers;
 
-import com.example.machallenge.models.entities.BaseEntity;
+import com.example.machallenge.models.BaseEntity;
 import com.example.machallenge.repositories.BaseRepository;
 import com.example.machallenge.services.BaseService;
 import com.example.machallenge.services.BaseServiceImpl;
@@ -8,10 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class BaseController<T extends BaseEntity> {
 

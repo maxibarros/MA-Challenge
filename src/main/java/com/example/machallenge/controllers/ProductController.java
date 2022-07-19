@@ -1,9 +1,9 @@
 package com.example.machallenge.controllers;
 
-import com.example.machallenge.mappers.ProductMapper;
-import com.example.machallenge.models.dto.ProductDTO;
-import com.example.machallenge.models.dto.ProductPutRequestDTO;
-import com.example.machallenge.models.entities.Product;
+import com.example.machallenge.mappers.productos.ProductMapper;
+import com.example.machallenge.mappers.productos.dto.ProductDTO;
+import com.example.machallenge.mappers.productos.dto.ProductPutRequestDTO;
+import com.example.machallenge.models.Product;
 import com.example.machallenge.repositories.BaseRepository;
 import com.example.machallenge.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,10 +127,10 @@ public class ProductController extends BaseController<Product> {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
             }
 
-            product.get().setName(productPutRequestDTO.getName());
-            product.get().setLongDescription(productPutRequestDTO.getLongDescription());
-            product.get().setShortDescription(productPutRequestDTO.getShortDescription());
-            product.get().setUnitPrice(productPutRequestDTO.getUnitPrice());
+            product.get().setName(productPutRequestDTO.getNombre());
+            product.get().setLongDescription(productPutRequestDTO.getDescripcionLarga());
+            product.get().setShortDescription(productPutRequestDTO.getDescripcionCorta());
+            product.get().setUnitPrice(productPutRequestDTO.getPrecioUnitario());
             productService.update(product.get());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {

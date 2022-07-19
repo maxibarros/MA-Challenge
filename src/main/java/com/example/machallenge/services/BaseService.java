@@ -1,6 +1,6 @@
 package com.example.machallenge.services;
 
-import com.example.machallenge.models.entities.BaseEntity;
+import com.example.machallenge.models.BaseEntity;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package com.example.machallenge.models.entities;
+package com.example.machallenge.models;
 
-public enum OrderStatus {
+public enum OrderState {
     CREATED {
         public String toString() {
             return "CREADO";

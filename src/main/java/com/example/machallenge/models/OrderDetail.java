@@ -1,4 +1,4 @@
-package com.example.machallenge.models.entities;
+package com.example.machallenge.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,9 +22,14 @@ public class OrderDetail extends BaseEntity {
     private Product product;
 
     @Column(name = "cantidad", nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "precio_unitario", nullable = false)
-    private float detailPrice;
+    private Double detailPrice;
 
+    public Double calculateDetailPrice() {
+        if(product != null) {
+            return product.getUnitPrice() * quantity;
+        } return -1D;
+    }
 }

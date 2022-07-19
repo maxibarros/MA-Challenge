@@ -1,6 +1,6 @@
 package com.example.machallenge.services;
 
-import com.example.machallenge.models.entities.BaseEntity;
+import com.example.machallenge.models.BaseEntity;
 import com.example.machallenge.repositories.BaseRepository;
 
 import javax.transaction.Transactional;

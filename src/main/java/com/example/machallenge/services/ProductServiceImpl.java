@@ -1,6 +1,6 @@
 package com.example.machallenge.services;
 
-import com.example.machallenge.models.entities.Product;
+import com.example.machallenge.models.Product;
 import com.example.machallenge.repositories.BaseRepository;
 import com.example.machallenge.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

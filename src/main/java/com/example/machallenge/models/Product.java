@@ -1,4 +1,4 @@
-package com.example.machallenge.models.entities;
+package com.example.machallenge.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product")
+@Table(name = "productos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends BaseEntity {
 
 
-    @Column(name = "productID", nullable = false, unique = true, length = 250)
+    @Column(name = "producto_ID", nullable = false, unique = true, length = 250)
     private String productID;
 
     @Column(name = "nombre", nullable = false, unique = true, length = 100)
@@ -27,6 +27,6 @@ public class Product extends BaseEntity {
     private String longDescription;
 
     @Column(name = "precio_unitario", nullable = false)
-    private float unitPrice;
+    private Double unitPrice;
 
 }
