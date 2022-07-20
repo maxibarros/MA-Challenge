@@ -41,6 +41,7 @@ class MaChallengeApplicationTests {
                 .post("productos")
                 .then()
                 .statusCode(201);
+
     }
 
 }

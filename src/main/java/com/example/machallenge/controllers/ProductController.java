@@ -48,10 +48,7 @@ public class ProductController extends BaseController<Product> {
                     .stream()
                     .map(productMapper::mapProduct)
                     .collect(Collectors.toList());
-
-            responseMap.put("success", Boolean.TRUE);
-            responseMap.put("data", productDTOList);
-            return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+            return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -66,11 +63,8 @@ public class ProductController extends BaseController<Product> {
                 responseMap.put("error", "Producto no encontrado.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
             }
-            ProductDTO productDTO = productMapper.mapProduct(product.get());
-
-            responseMap.put("success", Boolean.TRUE);
-            responseMap.put("data", productDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+            ProductDTO response = productMapper.mapProduct(product.get());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -85,11 +79,9 @@ public class ProductController extends BaseController<Product> {
                 responseMap.put("validations", super.validate(result));
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
             }
-
-            ProductDTO save = productMapper.mapProduct(super.create(productMapper.mapProduct(productDTO)));
-            responseMap.put("success", Boolean.TRUE);
-            responseMap.put("data", save);
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
+            Product save = productService.save(productMapper.mapProduct(productDTO));
+            ProductDTO response = productMapper.mapProduct(save);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
