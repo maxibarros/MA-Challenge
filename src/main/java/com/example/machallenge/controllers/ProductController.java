@@ -41,7 +41,7 @@ public class ProductController extends BaseController<Product> {
             if (productList.isEmpty()) {
                 responseMap.put("success", Boolean.FALSE);
                 responseMap.put("message", "No se encontraron productos.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseMap);
             }
 
             List<ProductDTO> productDTOList = productList
@@ -103,9 +103,9 @@ public class ProductController extends BaseController<Product> {
     }
 
     @PutMapping(value = "{productID}")
-    public ResponseEntity<?> saveProduct(@PathVariable(name = "productID") String productID,
-                                         @Valid @RequestBody ProductPutRequestDTO productPutRequestDTO,
-                                         BindingResult result) {
+    public ResponseEntity<?> updateProduct(@PathVariable(name = "productID") String productID,
+                                           @Valid @RequestBody ProductPutRequestDTO productPutRequestDTO,
+                                           BindingResult result) {
         try {
             Map<String, Object> responseMap = new HashMap<>();
             Optional<Product> product = productService.findByProductID(productID);

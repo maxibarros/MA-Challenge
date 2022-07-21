@@ -39,7 +39,7 @@ public class OrderController extends BaseController<Order> {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveProduct(@Valid @RequestBody OrderRequestDTO orderRequestDTO, BindingResult result) {
+    public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO, BindingResult result) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
             if (result.hasErrors()) {
