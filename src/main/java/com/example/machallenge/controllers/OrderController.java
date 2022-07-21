@@ -59,8 +59,6 @@ public class OrderController extends BaseController<Order> {
         }  catch(DateTimeParseException e) {
             responseMap.put("error", "Formato de horario incorrecto (HH:mm).");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -77,8 +75,6 @@ public class OrderController extends BaseController<Order> {
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Formato de fecha incorrecto (yyyy-MM-dd).");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

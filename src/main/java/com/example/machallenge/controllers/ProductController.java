@@ -36,8 +36,6 @@ public class ProductController extends BaseController<Product> {
 
     @GetMapping
     public ResponseEntity<?> getAllProducts() {
-        try {
-
             List<Product> productList = super.list();
             if (productList.isEmpty()) {
                 Map<String, String> responseMap = new HashMap<>();
@@ -50,14 +48,10 @@ public class ProductController extends BaseController<Product> {
                     .map(productMapper::mapProduct)
                     .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @GetMapping(value = "{productID}")
     public ResponseEntity<?> getProduct(@PathVariable(name = "productID") String productID) {
-        try {
             Optional<Product> product = productService.findByProductID(productID);
             if (!product.isPresent()) {
                 Map<String, String> responseMap = new HashMap<>();
@@ -66,28 +60,20 @@ public class ProductController extends BaseController<Product> {
             }
             ProductDTO response = productMapper.mapProduct(product.get());
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PostMapping
     public ResponseEntity<?> saveProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult result) {
-        try {
             if (result.hasErrors()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(super.validate(result));
             }
             Product save = productService.save(productMapper.mapProduct(productDTO));
             ProductDTO response = productMapper.mapProduct(save);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @DeleteMapping(value = "{productID}")
     public ResponseEntity<?> deleteProduct(@PathVariable(name = "productID") String productID) {
-        try {
             if (!productService.existsByProductID(productID)) {
                 Map<String, String> responseMap = new HashMap<>();
                 responseMap.put("error", "Producto no encontrado.");
@@ -95,16 +81,12 @@ public class ProductController extends BaseController<Product> {
             }
             productService.deleteByProductID(productID);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PutMapping(value = "{productID}")
     public ResponseEntity<?> updateProduct(@PathVariable(name = "productID") String productID,
                                            @Validated @RequestBody ProductPutRequestDTO productPutRequestDTO,
                                            BindingResult result) {
-        try {
             Optional<Product> product = productService.findByProductID(productID);
             if (!product.isPresent()) {
                 Map<String, String> responseMap = new HashMap<>();
@@ -120,9 +102,6 @@ public class ProductController extends BaseController<Product> {
             product.get().setUnitPrice(productPutRequestDTO.getPrecioUnitario());
             productService.update(product.get());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
 }

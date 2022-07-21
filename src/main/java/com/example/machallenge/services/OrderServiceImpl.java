@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,34 +29,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
     @Override
     @Transactional
-    public Order save(Order order){
-        //TODO: evito recursividad creando una lista, pero igualmente el debugger se clava
+    public Order save(Order order) {
         order.setCreateDate(LocalDate.now());
-        /*List<OrderDetail> orderDetailsList = new ArrayList<>();
-        for(OrderDetail od: order.getOrderDetails()) {
+        for (OrderDetail od : order.getOrderDetails()) {
             Optional<Product> p = productService.findByProductID(od.getProduct().getProductID());
-            if(p.isPresent()) {
-                OrderDetail detail = new OrderDetail();
-                detail.setProduct(p.get());
-                detail.setQuantity(od.getQuantity());
-                detail.setDetailPrice(detail.calculateDetailPrice());
-                detail.setOrder(order);
-                orderDetailsList.add(detail);
-            } else throw new RuntimeException("Producto no encontrado.");
-        }
-        order.setOrderDetails(orderDetailsList);
-
-         */
-        for(OrderDetail od: order.getOrderDetails()) {
-            Optional<Product> p = productService.findByProductID(od.getProduct().getProductID());
-            if(p.isPresent()) {
+            if (p.isPresent()) {
                 od.setOrder(order);
                 od.setProduct(p.get());
                 od.setDetailPrice(od.calculateDetailPrice());
             } else throw new RuntimeException("Producto no encontrado.");
         }
 
-        if(order.applyToDiscount()) {
+        if (order.applyToDiscount()) {
             order.setDiscount(true);
             order.setAmount(order.calculateTotalAmountWithDiscount());
         } else {
