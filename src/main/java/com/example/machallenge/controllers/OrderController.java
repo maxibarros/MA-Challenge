@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -39,20 +39,17 @@ public class OrderController extends BaseController<Order> {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO, BindingResult result) {
+    public ResponseEntity<?> saveOrder(@Validated @RequestBody OrderRequestDTO orderRequestDTO, BindingResult result) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
             if (result.hasErrors()) {
-                responseMap.put("success", Boolean.FALSE);
-                responseMap.put("validations", super.validate(result));
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(super.validate(result));
             }
             Order order = orderMapper.mapOrderRequest(orderRequestDTO);
             order.getOrderDetails().stream()
                     .forEach(orderDetail -> {
                         if(!productService.existsByProductID(orderDetail.getProduct().getProductID())){
-                            responseMap.put("success", Boolean.FALSE);
-                            responseMap.put("message", "Producto " + orderDetail.getProduct().getProductID() + " no existe.");
+                            responseMap.put("error", "Producto " + orderDetail.getProduct().getProductID() + " no existe.");
                         }
                     });
             if(!responseMap.isEmpty()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
@@ -60,8 +57,7 @@ public class OrderController extends BaseController<Order> {
             OrderResponseDTO orderResponseDTO = orderMapper.mapOrderResponse(order);
             return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
         }  catch(DateTimeParseException e) {
-            responseMap.put("success", Boolean.FALSE);
-            responseMap.put("message", "Formato de horario incorrecto (HH:mm).");
+            responseMap.put("error", "Formato de horario incorrecto (HH:mm).");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -70,7 +66,6 @@ public class OrderController extends BaseController<Order> {
 
     @GetMapping
     public ResponseEntity<?> findOrdersByDate(@RequestParam(name = "fecha") String fecha){
-        Map<String, Object> responseMap = new HashMap<>();
         try {
             LocalDate createDate = LocalDate.parse(fecha);
             List<Order> allOrdersByCreateDate = orderService.findAllByCreateDate(createDate);
@@ -79,7 +74,7 @@ public class OrderController extends BaseController<Order> {
                     .collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(orderResponseDTOList);
         } catch(DateTimeParseException e) {
-            responseMap.put("success", Boolean.FALSE);
+            Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Formato de fecha incorrecto (yyyy-MM-dd).");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
         } catch (Exception e) {

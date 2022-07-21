@@ -15,8 +15,8 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 public class ProductDTO {
 
-    @NotNull(message = "{productID.notnull}")
-    @NotBlank(message = "{productID.notblank}")
+    @NotNull(message = "{product.productID.notnull}")
+    @NotBlank(message = "{product.productID.notblank}")
     private String id;
     @NotNull(message = "{product.name.notnull}")
     @NotBlank(message = "{product.name.notblank}")
@@ -30,8 +30,5 @@ public class ProductDTO {
     @NotNull(message = "{product.unitPrice.notnull}")
     @Positive(message = "{product.unitPrice.positive}")
     private Double precioUnitario;
-
-    //TODO: podria hacer una herencia de DTO para no declarar dos veces los mismos fields y restricciones.
-    // Es buena practica por mas que tengan funciones distintas?
 
 }

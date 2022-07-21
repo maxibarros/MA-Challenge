@@ -168,8 +168,7 @@ class TO2_OrderControllerTest {
                         .content(objectMapper.writeValueAsString(orderRequestDTOWithErrors)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonPath("success").value(Boolean.FALSE))
-                .andExpect(jsonPath("validations.horario").value("El horario no puede estar vacio."));
+                .andExpect(jsonPath("horario").value("El horario no puede estar vacio."));
     }
 
 

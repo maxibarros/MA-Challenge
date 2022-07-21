@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,10 +37,10 @@ public class ProductController extends BaseController<Product> {
     @GetMapping
     public ResponseEntity<?> getAllProducts() {
         try {
-            Map<String, Object> responseMap = new HashMap<>();
+
             List<Product> productList = super.list();
             if (productList.isEmpty()) {
-                responseMap.put("success", Boolean.FALSE);
+                Map<String, String> responseMap = new HashMap<>();
                 responseMap.put("message", "No se encontraron productos.");
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseMap);
             }
@@ -57,9 +58,9 @@ public class ProductController extends BaseController<Product> {
     @GetMapping(value = "{productID}")
     public ResponseEntity<?> getProduct(@PathVariable(name = "productID") String productID) {
         try {
-            Map<String, Object> responseMap = new HashMap<>();
             Optional<Product> product = productService.findByProductID(productID);
             if (!product.isPresent()) {
+                Map<String, String> responseMap = new HashMap<>();
                 responseMap.put("error", "Producto no encontrado.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
             }
@@ -71,13 +72,10 @@ public class ProductController extends BaseController<Product> {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult result) {
+    public ResponseEntity<?> saveProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult result) {
         try {
-            Map<String, Object> responseMap = new HashMap<>();
             if (result.hasErrors()) {
-                responseMap.put("success", Boolean.FALSE);
-                responseMap.put("validations", super.validate(result));
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(super.validate(result));
             }
             Product save = productService.save(productMapper.mapProduct(productDTO));
             ProductDTO response = productMapper.mapProduct(save);
@@ -90,8 +88,8 @@ public class ProductController extends BaseController<Product> {
     @DeleteMapping(value = "{productID}")
     public ResponseEntity<?> deleteProduct(@PathVariable(name = "productID") String productID) {
         try {
-            Map<String, Object> responseMap = new HashMap<>();
             if (!productService.existsByProductID(productID)) {
+                Map<String, String> responseMap = new HashMap<>();
                 responseMap.put("error", "Producto no encontrado.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
             }
@@ -104,21 +102,18 @@ public class ProductController extends BaseController<Product> {
 
     @PutMapping(value = "{productID}")
     public ResponseEntity<?> updateProduct(@PathVariable(name = "productID") String productID,
-                                           @Valid @RequestBody ProductPutRequestDTO productPutRequestDTO,
+                                           @Validated @RequestBody ProductPutRequestDTO productPutRequestDTO,
                                            BindingResult result) {
         try {
-            Map<String, Object> responseMap = new HashMap<>();
             Optional<Product> product = productService.findByProductID(productID);
             if (!product.isPresent()) {
+                Map<String, String> responseMap = new HashMap<>();
                 responseMap.put("error", "Producto no encontrado.");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMap);
             }
             if (result.hasErrors()) {
-                responseMap.put("success", Boolean.FALSE);
-                responseMap.put("validations", super.validate(result));
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(super.validate(result));
             }
-
             product.get().setName(productPutRequestDTO.getNombre());
             product.get().setLongDescription(productPutRequestDTO.getDescripcionLarga());
             product.get().setShortDescription(productPutRequestDTO.getDescripcionCorta());
